@@ -1,4 +1,4 @@
-## Gitsy
-Script lookups: automation with bash, advanced SQL tricks, networking with Python and C, tests, django intricacies and more!
+#### Gitsy
+Script lookups: automation with bash, advanced SQL tricks, networking, tests, pythonian tricks, flexing with C, django intricacies and more!
 
-#### Descripte each section: 
+##### Descripte each section: 
