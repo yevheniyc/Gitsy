@@ -1,0 +1,10 @@
+1. Terminal configuration:
+    - Setup default prompt name in one of the .bash* files:
+        - Execution steps: ~/.bash_profile -> ~/.bash_login -> ~/.profile
+        >> vi .bash_profile -> export PS1='\h:\W \u:' -> host:cwd user:
+        >> vi .bash_profile -> alias ls='ls -lah'
+        >> source .bash_profile
+    - Settings -> Sharing: add "hostname" - how other devices on local network will see you
+    - Inspector -> Setup default prompt color, text size, prompt width and so forth
+    
+
