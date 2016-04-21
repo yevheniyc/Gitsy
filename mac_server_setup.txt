@@ -7,4 +7,11 @@
     - Settings -> Sharing: add "hostname" - how other devices on local network will see you
     - Inspector -> Setup default prompt color, text size, prompt width and so forth
     
+2. Install Xcode command line tools:
+    - Install Xcode from Apple Store
+    - Install command line tools:
+        >> xcode-select --install
 
+2. Configure Sublime:
+    - download from sublime website
+    
