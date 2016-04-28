@@ -11,7 +11,101 @@
     - Install Xcode from Apple Store
     - Install command line tools:
         >> xcode-select --install
+    - Make sure to agree to xcode terms:
+        - open Xcode.app or >> sudo xcodebuild -license -> agree
 
 2. Configure Sublime:
     - download from sublime website
+    - create a shortcut:
+        >> ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/local/bin/subl
+        
+3. Install Homebrew (without sudo!):
+    >> ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    >> brew update - to update brew (do this often)
+    >> brew doctor - to fix any broken links (do this often)
+    
+4. Update the locate database (do this regulary):
+    >> sudo /usr/libexec/locate.updatedb
+    
+4a. Install vim with homebrew:
+    >> brew install vim
+    
+5. Install the latest 2.7.* python version with homebrew 
+    >> brew install python
+    - the latest version will be installed here:
+        /usr/local/Cellar/python
+    - and linked at /usr/local/bin/python and /usr/local/bin/python2
+    - for more explanation on how to manage system and homebrew's python frameworks, look below
+        
+    Important:
+    
+    1. Homebrew will intall python in the Cellar directory and add a link at /usr/local/bin/python and /usr/local/bin/python2
+    2. System python is installed at /System/Library/Frameworks/Python.framework/ with a link at /usr/bin/python
+    3. Do NOT remove system python as Apple uses it for other system applications
+    4. The following is the execution order: /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+    5. So the system path is executed the last, so "$ python" command will call system python and NOT homebrew's python
+    6. "$ python2" or "/usr/local/bin/python" will call brew's python and can later be linked to virtualenvs
+    
+6. Install GitHub and Git:
+    - download GitHub app
+    - Install Command Line Tools:
+        - git-lfs - for managing large files with git (at /usr/local/bin)
+    - Install Git:
+        >> brew install git
+        - installs pip as a dependency and links it to /usr/local/Cellar/python/2.7.11(latest)/bin/pip
+        - upgrade pip to the latest version:
+            >> pip install --upgrade pip
+        - we can also install python3 and pip3 with homebrew and they will be linked in a similar matter
+
+7. Install virtualenv and virtualenvwrapper for managing python libraries
+    >> pip install virtualenv
+    >> pip install virtualenvwrapper
+    >> vi ~/.bash_profile
+        export WORKON_HOME=$HOME/.virtualenvs           # ~/.virtualenvs - all python packages for ths env
+        source /usr/local/bin/virtualenvwrapper.sh      # activate a tool for managing envs
+    >> sourch ~/.bash_profile                           # reinitialize bash with new variables
+    >> mkvirtualenv redhat_dev                          # build a new environment at ~/.virtualenvs/redhat_dev/...
+    - python is linked to the lates downloaded with homebrew (not the system python):
+        - ~/.virtualenvs/redhat_dev/bin/python -> python2.7 -> /usr/local/bin/python2.7 -> /usr/local/Cellar/python...
+    >> deactivate redhat_dev - exit virtual env for the next step
+    
+8. Install Postgres
+    >> brew install postgres (9.5.2 installed):
+        - installed at: /usr/local/Cellar/postgresql/9.5.2/...homebrew.mxcl.postgresql.plist...
+        - shortcut at: /usr/local/bin/postgres
+        - all of pg_* commands and database data: /usr/local/var/postgres/...
+    - If desired, add homebrew.mxcl.postgresql.plist to lauch deamons, but wait for now
+    - Add postgres update script somewhere below
+
+9. Postgres Configurations:
+    - Find a unique ID for a new user and new group using the following commands and look at the output for a unused UniqueID and a unused PrimaryGroupID. It doesn't need to be sequential:
+            
+            >> dscl . -list /Users UniqueID
+            >> dscl . -list /Groups PrimaryGroupID
+            
+    - Use the unique ID (183 used) to create the user and group:
+        
+        sudo dscl . -create /Groups/postgres                                    # greate a postgres group
+        sudo dscl . -create /Groups/postgres RealName 'PostgreSQL Server'       # give a (local) name to the postgres group
+        sudo dscl . -create /Groups/postgres PrimaryGroupID 183                 # assign group ID to postgres         
+        sudo dscl . -create /Groups/postgres UserShell /usr/bin/false           # the group does not have a bash (?)
+        sudo dscl . -create /Groups/postgres Password 'postgres'                # set group password
+        sudo dscl . -create /Groups/postgres NFSHomeDirectory /var/empty        # indicate home dir for the group
+        
+        sudo dscl . -create /Users/postgres                                     # create a user 
+        sudo dscl . -create /Users/postgres Password 'postgres'                 # add password to the user
+        sudo dscl . -create /Users/postgres RealName 'PostgreSQL Server'        # give a local name to the user postgres
+        sudo dscl . -create /Users/postgres PrimaryGroupID 183                  # assign postgres user to the postgres group
+        sudo dscl . -create /Users/postgres UniqueID 183                        # assign a unique id to postgres user
+        sudo dscl . -create /Users/postgres UserShell /bin/bash                 # assign a shell to postgres user
+        sudo dscl . -create /Users/postgres NFSHomeDirectory \
+                            /usr/local/var/postgres                             # assign a home dir to postgres user
+                            
+    - !!!! Go to the Configure Everything section before installing apache, django, and other packages
+
+10. Django Installation:
+    >> workon redhat_dev
+    >> pip install Django==1.9
+
+    
     
