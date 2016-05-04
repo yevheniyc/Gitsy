@@ -2,6 +2,7 @@
 	py_regex_examples.py - Yevheniy Chuba - 04/29/2016
 
 	Summary of regex module with practical examples.
+	Following: https://automatetheboringstuff.com/chapter7/
 
 '''
 
